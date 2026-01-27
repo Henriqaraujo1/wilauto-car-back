@@ -1,0 +1,522 @@
+Comentarios e codigos do arquivo Stock Entry Controll
+/*
+*Comentarios - Remover para outro local
+*Comentarios da função de adição de item ao estoque
+// if (productInStock.codeStatus === 200) {
+      //   // Calcular nova quantidade
+      //   updateQtd = productInStock.productStock.qtd + +productEntry.newQtd;
+      //   updatePriceTotal = updateQtd * productEntry.priceUnit;
+      //   /**  Verificar se essa mudança do preço é na entrada do produto
+      //    * Pq pode ter problema no estoque fisico, tendo produtos de valores diferernte
+      //    * Sendo q a ideia do sistema é deixar tudo mais simples
+      //    * Problema:
+      //    * O sistema pode ter uma tabela no banco com historico de preços
+      //    * Assim ele informa qual produto deve ser colocado para venda,
+      //    * o que traz um pouco do complexidade é na falta de organização do estoque
+      //    * Não entregando o produto que o sistema pede para ser entregue
+      //    *
+      //    * 1ª solução - Testar
+      //    * Criar um validador de preço, que fará o seguinte caminho
+      //    * Primeiro vai cadastrar a entrada do produto ao estoque
+      //    * Informa o cliente que o produto tem um novo preço,
+      //    * Vai atualizar u lucro de acordo com o percentual e
+      //    * informa o cliente por uma notificação na barra de notificação
+      //    *
+      //    */
+      //   // const updatePriceProduct =
+      //   //   await ProductControllerInstance.updateProduct(
+      //   //     productEntry.idProduct,
+      //   //     productEntry.priceUnit
+      //   //   );
+      //   // Criar produto na tabela de entrada
+      //   await StockEntryModelInstance.createEntryProduct(productEntry);
+      //   // associa os itens que serão adicionados ao o estoque
+      //   newProductStock = {
+      //     idProduct: productEntry.idProduct,
+      //     qtd: updateQtd,
+      //     priceUnit: productEntry.priceUnit,
+      //     priceTotal: updatePriceTotal,
+      //   };
+      //   // Atualiza itens no estoque
+      //   const updateProductStock = await StockControlerInstance.updateProduct(
+      //     newProductStock
+      //   );
+      //   if (updateProductStock.codeStatus === 200) {
+      //     info.updateItemStock = true;
+      //     info.productUpdate.push(productEntry.idProduct);
+      //   }
+      // }
+      /**
+       * Está funcionando quando não tem o item
+       * Testar a regra de negocio para quando o
+       * produto for vendido, se ele vende os primeiros produtos
+       * que entraram
+       * Ou se essa logica é a certa
+       */
+
+      // if (productInStock.codeStatus === 404) {
+      //   newProductStock = {
+      //     idProduct: productEntry.idProduct,
+      //     qtd: productEntry.newQtd,
+      //     priceUnit: productEntry.priceUnit,
+      //     priceTotal: productEntry.priceTotal,
+      //   };
+      //   insertNewProductEntry =
+      //     await StockEntryModelInstance.createEntryProduct(productEntry);
+      //   // if (insertNewProductEntry === true) {
+      //   // await StockControlerInstance.createProductStock(newProductStock);
+      //   info.createItemStock = true;
+      //   info.productCreate.push(productEntry.idProduct);
+      //   //   productEntry.pega = "não";
+      //   // }
+      // }
+      // console.log(newProducts.productEntry);
+
+      // const returnProducts = newProducts.productEntry.map((validateProduct) => {
+      //   console.log(Object.keys(validateProduct));
+      //   return validateProduct.dateEntry;
+      // });
+
+      // console.log(returnProducts);
+      // console.log(newProducts.productEntry);
+      // let productCreate = 0;
+      // console.log(productCreate);
+      // newProducts.productEntry.map(async (validateProduct) => {
+      //   console.log(Object.keys(validateProduct));
+      //   const test = validateProduct.dateEntry;
+      //   console.log(test);
+      //   if (validateProduct.createItemStock === "criado") {
+      //     console.log("entrou no if");
+      //     productCreate = productCreate + 1;
+      //     console.log(productCreate);
+      //   }
+      // });
+      // console.log(productCreate);
+      // if (!insertNewProductEntry) {
+      //   return createHttpError({
+      //     codeStatus: 400,
+      //     message: "Erro ao adicionar entrada de produto.",
+      //   });
+      // } else {
+      //   /*Criar logica de adicionar novo item ao stock atual
+      //   * Passar o id para idStockEntry dentro do estoque atual
+      //   * para identificar quando que foi adicionado,
+      //   * pode usar o id_stock_entry como numero do pedido
+      //   Adicionar  esse id no estoque atual
+      //   */
+      //    console.log(newProducts)
+
+      //   // newProducts.forEach(async (orderStockEntry, index) => {
+      //   //   const test = await StockEntryModelInstance.getIdStockEntryByOrder(
+      //   //     newProducts[0].orderStockEntry
+      //   //   );
+
+      //   //   orderStockEntry.idStockEntry = test[index].idStockEntry;
+      //   //   console.log(test)
+      //   // });
+
+      //   // newProducts.idStockEntry = idProductStock
+      //   // const addProduct = await StockControlerInstance.createProductStock(newProducts)
+
+      //   return insertNewProductEntry;
+      // }
+
+      //Melhor é atualizar o banco e registrar no stock entry as entradas
+  // async createEntryProduct_Old(dataProductEntry) {
+  //   try {
+  //     const newProducts = dataProductEntry;
+  //     console.log(newProducts)
+  //     const date = new Date();
+
+  //     const info = {
+  //       createItemStock: false,
+  //       productCreateCount: 0,
+  //       updateItemStock: false,
+  //       productUpdateCount: 0,
+  //     };
+
+  //     const organizeEntryStock = newProducts.reduce(
+  //       (resultOrder, currentOrder) => {
+  //         const qtd = currentOrder.newQtd;
+  //         const priceTotal = currentOrder.priceTotal;
+  //         const dateEntry = moment(date).format("lll");
+  //         const idProvider = currentOrder.idProvider;
+  //         const statusDelivery = currentOrder.statusDelivery;
+  //         const valueDelivery = currentOrder.valueDelivery;
+  //         const idStockEntry = currentOrder.idStockEntry;
+
+  //         if (!resultOrder[idProvider]) {
+  //           resultOrder[idProvider] = {
+  //             newQtd: 0,
+  //             idStockEntry: 0,
+  //             priceTotal: 0,
+  //             dateEntry: 0,
+  //             idProvider: 0,
+  //             statusDelivery: 0,
+  //             valueDelivery: 0,
+  //           };
+  //         }
+  //         resultOrder[idProvider].newQtd += qtd;
+  //         resultOrder[idProvider].priceTotal += priceTotal;
+  //         resultOrder[idProvider].idStockEntry = idStockEntry;
+  //         resultOrder[idProvider].dateEntry = dateEntry;
+  //         resultOrder[idProvider].idProvider = idProvider;
+  //         resultOrder[idProvider].statusDelivery = statusDelivery;
+  //         resultOrder[idProvider].valueDelivery = valueDelivery;
+
+  //         return resultOrder;
+  //       },
+  //       {}
+  //     );
+
+  //     const organizeNewEntry = [];
+
+  //     for (const [key, currentOrder] of Object.entries(organizeEntryStock)) {
+  //       organizeNewEntry.push(currentOrder);
+  //     }
+
+  //     const newEntryOrder = Object.assign({}, ...organizeNewEntry);
+
+  //     const newEntryProduct = await StockEntryModelInstance.createEntryProduct(
+  //       newEntryOrder
+  //     );
+
+  //     for (const productEntry of newProducts) {
+  //       //   // ! -Verifica se tem validade ou não
+  //       productEntry.dateEntry = moment(date).format("lll");
+  //       // ! - Se não tiver coloca como "sem vencimento"
+  //       if (!productEntry.hasOwnProperty("dueDateProduct")) {
+  //         productEntry.dueDateProduct = "sem vencimento";
+  //       }
+  //       // ! - Se tiver, arruma a data
+  //       else {
+  //         const formatDate = moment(
+  //           productEntry.dueDateProduct,
+  //           "DD-MM-YYYY"
+  //         ).format("L");
+  //         productEntry.dueDateProduct = formatDate;
+  //       }
+
+  //       //! - Consultar se o produto está no estoque
+  //       const productStock = productEntry;
+  //       const productInStock = await StockControllerInstance.getProductIdStock(
+  //         productStock
+  //       );
+
+  //       const newRegisterEnter = {
+  //         dataEntry: productEntry.dateEntry,
+  //         idStockEntry: productEntry.idStockEntry,
+  //         qtd: productEntry.newQtd,
+  //         priceUnit: productEntry.priceUnit,
+  //         priceTotal: productEntry.priceTotal,
+  //         idProduct: productEntry.idProduct,
+  //       };
+
+  //       const registerEntryOrder =
+  //         await StockEntryModelInstance.createRegisterEntry(newRegisterEnter);
+
+  //       let productSameBatch, productSamePrice;
+  //       let stockItemToUpdateByBatch = null;
+  //       let stockItemToUpdateByPrice = null;
+
+  //       delete productEntry.codProduct;
+  //       delete productEntry.nameProduct;
+  //       delete productEntry.id;
+
+  //       if (productInStock.codeStatus === 200) {
+  //         if (!productEntry.hasOwnProperty("productBatch")) {
+  //           productSamePrice =
+  //             await productInStock.productStock.infoProduct.filter(
+  //               (organizeStock) => {
+  //                 return organizeStock.priceUnit === productEntry.priceUnit;
+  //               }
+  //             );
+  //         } else {
+  //           // ! - Aqui verifica se existe o produto com o preço e lote soma as quantidade e atualiza um campo só
+  //           productSameBatch =
+  //             await productInStock.productStock.infoProduct.filter(
+  //               (organizeStock) => {
+  //                 return (
+  //                   organizeStock.priceUnit === productEntry.priceUnit &&
+  //                   organizeStock.productBatch === productEntry.productBatch
+  //                 );
+  //               }
+  //             );
+  //         }
+  //         const organizeInfoByBatch = {};
+  //         const organizeInfoByPrice = {};
+  //         let upStockItemByBatch = {},
+  //           upStockItemByPrice = {};
+  //         if (productSameBatch) {
+  //           console.log(productSameBatch)
+  //           // ! - Todos os objetos serão somados em um objeto organizado
+  //           await productSameBatch.forEach((productStock) => {
+  //             const { priceUnit, totalQtdByProduct, ...info } = productStock;
+
+  //             if (!organizeInfoByBatch[priceUnit]) {
+  //               organizeInfoByBatch[priceUnit] = {
+  //                 priceUnit,
+  //                 totalQtdByProduct,
+  //                 ...info,
+  //               };
+  //             } else {
+  //               organizeInfoByBatch[priceUnit].totalQtdByProduct +=
+  //                 totalQtdByProduct;
+  //             }
+  //           });
+
+  //           // ! - Separa o produto mais antigo
+  //           console.log(productSameBatch)
+  //           if (productSameBatch.length > 0) {
+  //             stockItemToUpdateByBatch = productSameBatch.shift();
+  //           }
+
+  //           const responseStockInfo = Object.values(organizeInfoByBatch);
+  //           upStockItemByBatch = Object.assign({}, ...responseStockInfo);
+
+  //           const newQtd =
+  //             upStockItemByBatch.totalQtdByProduct + productEntry.newQtd;
+  //           const priceTotal = upStockItemByBatch.priceUnit * newQtd;
+  //           upStockItemByBatch.totalQtdByProduct = newQtd;
+  //           upStockItemByBatch.priceTotalByProduct = priceTotal;
+  //         }
+  //         if (productSamePrice) {
+  //           // ! - Todos os objetos serão somados em um objeto organizado
+
+  //           await productSamePrice.forEach((productStock) => {
+  //             const { priceUnit, totalQtdByProduct, ...info } = productStock;
+
+  //             if (!organizeInfoByPrice[priceUnit]) {
+  //               organizeInfoByPrice[priceUnit] = {
+  //                 priceUnit,
+  //                 totalQtdByProduct,
+  //                 ...info,
+  //               };
+  //             } else {
+  //               organizeInfoByPrice[priceUnit].totalQtdByProduct +=
+  //                 totalQtdByProduct;
+  //             }
+  //           });
+
+  //           if (productSamePrice.length > 0) {
+  //             stockItemToUpdateByPrice = productSamePrice.shift();
+  //           }
+
+  //           const responseStockInfo = Object.values(organizeInfoByPrice);
+  //           // ! - Transforma o array em um objeto
+  //           upStockItemByPrice = Object.assign({}, ...responseStockInfo);
+
+  //           // ! - Soma as quantidades por preço
+  //           const newQtd =
+  //             upStockItemByPrice.totalQtdByProduct + productEntry.newQtd;
+  //           const priceTotal = newQtd * upStockItemByPrice.priceUnit;
+  //           upStockItemByPrice.totalQtdByProduct = newQtd;
+  //           upStockItemByPrice.priceTotalByProduct = priceTotal;
+  //         }
+  //         // ! - Atualiza cada item no banco
+  //         let updateItemStockByBatch = {};
+  //         let updateItemStockByPrice = {};
+  //         if (upStockItemByBatch.totalQtdByProduct > 0) {
+  //           if (
+  //             upStockItemByBatch.idStock === stockItemToUpdateByBatch.idStock
+  //           ) {
+  //             // ! - Apaga o valor que foi pego para somar e organizar o estoque
+  //             await StockControllerInstance.deleteItemByQtd(productSameBatch);
+  //             updateItemStockByBatch =
+  //               await StockControllerInstance.updateProductByBatch(
+  //                 upStockItemByBatch
+  //               );
+  //             if (updateItemStockByBatch.codeStatus === 200) {
+  //               const countProductUpdt = info.productUpdateCount;
+  //               info.updateItemStock = true;
+  //               info.productUpdateCount = countProductUpdt + 1;
+  //             }
+  //           }
+  //         } else if (upStockItemByPrice.totalQtdByProduct > 0) {
+  //           // ! - Atualiza o banco para produto com mesmo preço
+  //           if (
+  //             upStockItemByPrice.idStock === stockItemToUpdateByPrice.idStock
+  //           ) {
+  //             await StockControllerInstance.deleteItemByQtd(productSamePrice);
+  //             updateItemStockByPrice =
+  //               await StockControllerInstance.updateProductNoBatch(
+  //                 upStockItemByPrice
+  //               );
+  //             if (updateItemStockByPrice.codeStatus === 200) {
+  //               const countProductUpdt = info.productUpdateCount;
+  //               info.updateItemStock = true;
+  //               info.productUpdateCount = countProductUpdt + 1;
+  //             }
+  //           }
+  //         } else {
+  //           // ! - Aqui deve cadastrar item que não tenha nem preço igual ou lote e preço igual
+  //           let upProductStock = {
+  //             idProduct: 0,
+  //             qtd: 0,
+  //             priceUnit: 0,
+  //             priceTotal: 0,
+  //           };
+
+  //           if (productEntry.idStockEntry === 0) {
+  //             productEntry.isDevolution = "sim";
+  //           } else {
+  //             productEntry.isDevolution = "nao";
+  //           }
+  //           if (productEntry.hasOwnProperty("productBatch")) {
+  //             upProductStock = {
+  //               idProduct: productEntry.idProduct,
+  //               qtd: productEntry.newQtd,
+  //               priceUnit: productEntry.priceUnit,
+  //               priceTotal: productEntry.priceTotal,
+  //               dueDateProduct: productEntry.dueDateProduct,
+  //               idStockEntry: productEntry.idStockEntry,
+  //               productBatch: productEntry.productBatch,
+  //               isDevolution: productEntry.isDevolution,
+  //             };
+
+  //             const createProductStock =
+  //               await StockControllerInstance.createProductStock(
+  //                 upProductStock
+  //               );
+
+  //             if (createProductStock.codeStatus === 200) {
+  //               const countProductUpdt = info.productUpdateCount;
+  //               info.updateItemStock = true;
+  //               info.productUpdateCount = countProductUpdt + 1;
+  //             }
+  //           } else {
+  //             upProductStock = {
+  //               idProduct: productEntry.idProduct,
+  //               qtd: productEntry.newQtd,
+  //               priceUnit: productEntry.priceUnit,
+  //               priceTotal: productEntry.priceTotal,
+  //               dueDateProduct: productEntry.dueDateProduct,
+  //               idStockEntry: productEntry.idStockEntry,
+  //               isDevolution: productEntry.isDevolution,
+  //             };
+
+  //             if (productEntry.hasOwnProperty("productBatch")) {
+  //               upProductStock = {
+  //                 idProduct: productEntry.idProduct,
+  //                 qtd: productEntry.newQtd,
+  //                 priceUnit: productEntry.priceUnit,
+  //                 priceTotal: productEntry.priceTotal,
+  //                 dueDateProduct: productEntry.dueDateProduct,
+  //                 idStockEntry: productEntry.idStockEntry,
+  //                 productBatch: productEntry.productBatch,
+  //                 isDevolution: productEntry.isDevolution,
+  //               };
+
+  //               const createProductStock =
+  //                 await StockControllerInstance.createProductStock(
+  //                   upProductStock
+  //                 );
+
+  //               if (createProductStock.codeStatus === 200) {
+  //                 const countProductUpdt = info.productUpdateCount;
+  //                 info.updateItemStock = true;
+  //                 info.productUpdateCount = countProductUpdt + 1;
+  //               }
+  //             } else {
+  //               upProductStock = {
+  //                 idProduct: productEntry.idProduct,
+  //                 qtd: productEntry.newQtd,
+  //                 priceUnit: productEntry.priceUnit,
+  //                 priceTotal: productEntry.priceTotal,
+  //                 dueDateProduct: productEntry.dueDateProduct,
+  //                 idStockEntry: productEntry.idStockEntry,
+  //                 isDevolution: productEntry.isDevolution,
+  //               };
+
+  //               // Aqui tmb seria uma boa para criar o registro
+
+  //               const createProductStock =
+  //                 await StockControllerInstance.createProductStock(
+  //                   upProductStock
+  //                 );
+  //               if (createProductStock.codeStatus === 200) {
+  //                 const countProductUpdt = info.productUpdateCount;
+  //                 info.updateItemStock = true;
+  //                 info.productUpdateCount = countProductUpdt + 1;
+  //               }
+  //             }
+  //             const createProductStock =
+  //               await StockControllerInstance.createProductStock(
+  //                 upProductStock
+  //               );
+  //             if (createProductStock.codeStatus === 200) {
+  //               const countProductUpdt = info.productUpdateCount;
+  //               info.updateItemStock = true;
+  //               info.productUpdateCount = countProductUpdt + 1;
+  //             }
+  //           }
+  //         }
+  //       } else {
+  //         let newProductStock = {};
+  //         if (productEntry.hasOwnProperty("productBatch")) {
+  //           newProductStock = {
+  //             idProduct: productEntry.idProduct,
+  //             qtd: productEntry.newQtd,
+  //             priceUnit: productEntry.priceUnit,
+  //             priceTotal: productEntry.priceTotal,
+  //             dueDateProduct: productEntry.dueDateProduct,
+  //             idStockEntry: productEntry.idStockEntry,
+  //             productBatch: productEntry.productBatch,
+  //             isDevolution: productEntry.isDevolution,
+  //           };
+
+  //           const createProductStock =
+  //             await StockControllerInstance.createProductStock(newProductStock);
+
+  //           if (createProductStock.codeStatus === 200) {
+  //             const countProductUpdt = info.productUpdateCount;
+  //             info.updateItemStock = true;
+  //             info.productUpdateCount = countProductUpdt + 1;
+  //           }
+  //         } else {
+  //           newProductStock = {
+  //             idProduct: productEntry.idProduct,
+  //             qtd: productEntry.newQtd,
+  //             priceUnit: productEntry.priceUnit,
+  //             priceTotal: productEntry.priceTotal,
+  //             dueDateProduct: productEntry.dueDateProduct,
+  //             idStockEntry: productEntry.idStockEntry,
+  //             isDevolution: productEntry.isDevolution,
+  //           };
+
+  //           const createProductStock =
+  //             await StockControllerInstance.createProductStock(newProductStock);
+  //           if (createProductStock.codeStatus === 200) {
+  //             const countProductUpdt = info.productUpdateCount;
+  //             info.updateItemStock = true;
+  //             info.productUpdateCount = countProductUpdt + 1;
+  //           }
+  //         }
+  //       }
+  //     }
+  //     // ! - Aqui verifica se existe o produto com o preço se tiver, soma as quantidade e atualiza um campo só
+
+  //     if (info.createItemStock === true) {
+  //       return {
+  //         codeStatus: 200,
+  //         message: `Pedido adicionado ao estoque com sucesso`,
+  //       };
+  //     } else if (info.updateItemStock === true) {
+  //       return {
+  //         codeStatus: 200,
+  //         message: `Pedido atualizou ${info.productUpdateCount} produto do estoque com sucesso`,
+  //       };
+  //     } else {
+  //       return {
+  //         codeStatus: 400,
+  //         message: "Pedido não foi adicionado ao estoque",
+  //       };
+  //     }
+  //   } catch (err) {
+  //     return createHttpError({
+  //       codeStatus: 500,
+  //       message: "Contate o administrador",
+  //       info: err,
+  //     });
+  //   }
+  // }
