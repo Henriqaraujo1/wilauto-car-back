@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.2.0 (2026-01-29)
+
+
+### Features
+
+* entrega da atualização ([8dc0438](https://github.com/Henriqaraujo1/wilauto-car-back/commit/8dc0438397afab601f2f4bf606f39227ba2f3029))
+
 ### [1.1.1](https://github.com/Henriqaraujo1/biel-pecas-back/compare/v1.1.0...v1.1.1) (2026-01-09)
 
 ## 1.1.0 (2025-12-31)
