@@ -5,11 +5,11 @@ import pgp from "pg-promise";
 const pgPromise = pgp({ capSQL: true });
 const client = await connectDB();
 
-export default class ProductModel {
-  async createSubProduct(dataProduct) {
+export default class CarModel {
+  async createCar(dataCar) {
     try {
-      const value = dataProduct;
-      const statement = pgPromise.helpers.insert(value, null, "subProduct");
+      const value = dataCar;
+      const statement = pgPromise.helpers.insert(value, null, "car");
       const response = await client.query(statement);
       if (response.rowCount > 0) {
         return true;
@@ -18,11 +18,11 @@ export default class ProductModel {
       createHttpError(500, err);
     }
   }
-  async getCodProduct(productCod) {
+  async getCarPlate(infoCar) {
     try {
-      const statement = `SELECT * FROM "subProduct" WHERE "codProd" = ($1)`;
-      const codProd = [productCod];
-      const response = await client.query(statement, codProd);
+      const statement = `SELECT * FROM car WHERE "carPlate" = ($1)`;
+      const carPlate = [infoCar];
+      const response = await client.query(statement, carPlate);
       if (response.rowCount > 0) {
         return response.rows[0];
       }
@@ -30,22 +30,11 @@ export default class ProductModel {
       return createHttpError({ codeStatus: 500, info: err });
     }
   }
-  async getSubProductById(idSubProduct) {
+  async getCarByIdClient(infoCar) {
     try {
-      const statement = `SELECT * FROM "subProduct" WHERE "idSubProduct" = ($1)`;
-      const idProd = [idSubProduct];
-      const response = await client.query(statement, idProd);
-      if (response.rowCount > 0) {
-        return response.rows[0];
-      }
-    } catch (err) {
-      return createHttpError({ codeStatus: 500, info: err });
-    }
-  }
-  async getSubProductByIdProduct(idProduct) {
-    try {
-      const statement = `SELECT * FROM "subProduct" WHERE "idProduct" = ($1)`;
-      const response = await client.query(statement, [idProduct]);
+      const statement = `SELECT * FROM car WHERE "idClient" = ($1) ORDER BY "idCar" ASC`;
+      const idClient = [infoCar];
+      const response = await client.query(statement, idClient);
       if (response.rowCount > 0) {
         return response.rows;
       }
@@ -53,11 +42,11 @@ export default class ProductModel {
       return createHttpError({ codeStatus: 500, info: err });
     }
   }
-  async getProductByName(productName) {
+  async getChecklistCar(infoCar) {
     try {
-      const statement = `SELECT * FROM "subProduct" WHERE "nameSubProduct" = $1`;
-      const nameProd = [productName];
-      const response = await client.query(statement, nameProd);
+      const statement = `SELECT * FROM car WHERE "idCar" = ($1)`;
+      const carId = [infoCar];
+      const response = await client.query(statement, carId);
       if (response.rowCount > 0) {
         return response.rows[0];
       }
@@ -66,9 +55,9 @@ export default class ProductModel {
     }
   }
 
-  async getAllProduct() {
+  async getAllCar() {
     try {
-      const statement = `SELECT * FROM product ORDER BY "idSubProduct" ASC`;
+      const statement = `SELECT * FROM product ORDER BY "idCar" ASC`;
       const response = await client.query(statement);
       if (response.rowCount > 0) {
         return response.rows;
@@ -80,7 +69,7 @@ export default class ProductModel {
 
   async getNextCodProd() {
     try {
-      const statement = `SELECT "codSubProd" FROM "subProduct" ORDER BY "codSubProd" DESC LIMIT 1`;
+      const statement = `SELECT "codSubProd" FROM car ORDER BY "idCar" DESC LIMIT 1`;
       const response = await client.query(statement);
       if (response.rowCount > 0) {
         return response.rows[0];
@@ -92,22 +81,21 @@ export default class ProductModel {
       });
     }
   }
-  async updateSubProduct(idProduct, dataProduct) {
+
+  async updateCar(idCar, dataCar) {
     try {
-      const condition = pgPromise.as.format(
-        ` WHERE "idSubProduct" = ${idProduct}`
-      );
+      const condition = pgPromise.as.format(` WHERE "idCar" = ${idCar}`);
       const statement =
-        pgPromise.helpers.update(dataProduct, null, "subProduct") + condition;
+        pgPromise.helpers.update(dataCar, null, "car") + condition;
       const response = await client.query(statement);
       return response.rowCount > 0;
     } catch (err) {
       return createHttpError({ codeStatus: 500, info: err });
     }
   }
-  // async deleteProduct(idProduct) {
+  // async deleteCar(idCaruct) {
   //   try {
-  //     const statement = `DELETE FROM "subProduct" WHERE "idSubProduct" = ${idProduct}`;
+  //     const statement = `DELETE FROM car WHERE "idCar" = ${idCaruct}`;
   //     const response = await client.query(statement);
   //     return response.rowCount > 0;
   //   } catch (err) {

@@ -1,10 +1,8 @@
 import CartModel from "../models/cartModel.mjs";
 import createHttpError from "http-errors";
 import ProductService from "./ProductService.mjs";
-import SubProductService from "./SubProductService.mjs";
 
 const CartModelInstance = new CartModel();
-const SubProductServiceInstance = new SubProductService();
 const ProductServiceInstance = new ProductService();
 
 export default class CartService {
@@ -32,11 +30,6 @@ export default class CartService {
           nameProduct.codProd
         );
 
-        if (infoProduct.codeStatus === 404) {
-          infoProduct = await SubProductServiceInstance.getCodSubProduct(
-            nameProduct.codProd
-          );
-        }
 
         if (nameProduct.valueDiscount > 0) {
           nameProduct.valueTotalItem = nameProduct.priceWithDiscount;

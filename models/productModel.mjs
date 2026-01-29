@@ -15,6 +15,7 @@ export default class ProductModel {
         return true;
       }
     } catch (err) {
+      console.log(err)
       createHttpError(500, err);
     }
   }

@@ -1,6 +1,7 @@
 import authRouter from "./authRouter.mjs";
 import brandRouter from "./brandRouter.mjs";
 import budgetRouter from "./budgetRouter.mjs";
+import carRouter from "./carRouter.mjs";
 import cashierRouter from "./cashierRouter.mjs";
 import categoryRouter from "./categoryRouter.mjs";
 import clientRouter from "./clientRouter.mjs";
@@ -23,17 +24,16 @@ import stockEntryRouter from "./stockEntryRouter.mjs";
 import stockOutRouter from "./stockOutRouter.mjs";
 import stockRouter from "./stockNowRouter.mjs";
 import subCategoryRouter from "./subCategoryRouter.mjs";
-import subProductRouter from "./subProductRouter.mjs";
 import userRouter from "./userRouter.mjs";
 import workPositionRouter from "./workPositionRouter.mjs";
 import whatsappRouter from "./whatsappRouter.mjs";
-
 
 /* eslint import/no-anonymous-default-export: [2, {"allowArrowFunction": true}] */
 export default (app, passport) => {
   authRouter(app, passport);
   brandRouter(app);
   budgetRouter(app);
+  carRouter(app);
   cashierRouter(app);
   categoryRouter(app);
   clientRouter(app);
@@ -56,7 +56,6 @@ export default (app, passport) => {
   stockOutRouter(app);
   stockRouter(app);
   subCategoryRouter(app);
-  subProductRouter(app);
   userRouter(app);
   workPositionRouter(app);
   whatsappRouter(app);

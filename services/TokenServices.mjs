@@ -18,6 +18,8 @@ export default class TokenServices {
 
       const user = jwt.verify(token, process.env.SESSION_SECRET);
 
+
+
       return {
         codeStatus: 200,
         message: "Usuario autenticado",
@@ -54,7 +56,7 @@ export default class TokenServices {
       idUser: infoUser.idUser,
       permissions: infoUser.permissions,
       path: infoUser.path,
-      welcomeMsg: infoUser.welcomeMsg
+      welcomeMsg: infoUser.welcomeView
     };
 
     return jwt.sign(infoUserToToken, process.env.SESSION_SECRET, {

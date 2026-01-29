@@ -3,7 +3,7 @@ import ProductService from "./ProductService.mjs";
 import BrandService from "./BrandService.mjs";
 import StockModel from "../models/stockModel.mjs";
 import StockEntryModel from "../models/stockEntryModel.mjs";
-import SubProductService from "./SubProductService.mjs";
+import SubProductService from "./CarService.mjs";
 
 // const ProductServiceInstance = new ProductService();
 const BrandServiceInstance = new BrandService();
