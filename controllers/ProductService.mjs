@@ -2,10 +2,8 @@ import createHttpError from "http-errors";
 import BrandService from "./BrandService.mjs";
 import StockService from "./StockService.mjs";
 import ProductModel from "../models/productModel.mjs";
-import SubProductModel from "../models/subProductModel.mjs";
 
 const ProductModelInstance = new ProductModel();
-const SubProductModelInstance = new SubProductModel();
 const BrandServiceInstance = new BrandService();
 
 export default class ProductService {
@@ -22,6 +20,7 @@ export default class ProductService {
           message: "Produto já cadastrado com esse codigo de barra",
         });
       } else {
+        console.log(newProduct);
         const product = await ProductModelInstance.createProduct(newProduct);
 
         if (product) {
@@ -53,10 +52,6 @@ export default class ProductService {
       let getCodProduct = await ProductModelInstance.getCodProduct(productCod);
 
       if (getCodProduct === undefined) {
-        getCodProduct = await SubProductModelInstance.getCodProduct(productCod);
-      }
-
-      if (getCodProduct === undefined) {
         infoProduct = true;
       }
 
@@ -69,9 +64,8 @@ export default class ProductService {
         });
       } else {
         const StockServiceInstance = new StockService();
-        const qtdStockNow = await StockServiceInstance.getProductIdStock(
-          getCodProduct
-        );
+        const qtdStockNow =
+          await StockServiceInstance.getProductIdStock(getCodProduct);
 
         if (qtdStockNow.codeStatus === 200) {
           getCodProduct.qtdNow = qtdStockNow.productStock.totalQtd;
@@ -129,9 +123,8 @@ export default class ProductService {
   async getProductByCod(codProd) {
     try {
       const productCod = codProd;
-      const getCodProduct = await ProductModelInstance.getCodProduct(
-        productCod
-      );
+      const getCodProduct =
+        await ProductModelInstance.getCodProduct(productCod);
 
       if (getCodProduct === undefined) {
         return createHttpError({
@@ -165,11 +158,11 @@ export default class ProductService {
       let getIdProduct = {};
       if (productInfo.hasOwnProperty("nameProduct")) {
         getIdProduct = await ProductModelInstance.getProductByName(
-          productInfo.nameProduct.toLowerCase()
+          productInfo.nameProduct.toLowerCase(),
         );
       } else if (productInfo.hasOwnProperty("codProduct")) {
         getIdProduct = await ProductModelInstance.getCodProduct(
-          productInfo.codProduct
+          productInfo.codProduct,
         );
       }
 
@@ -244,7 +237,7 @@ export default class ProductService {
       } else {
         for (const product of allProduct) {
           const infoBrand = await BrandServiceInstance.getBrandId(
-            product.idBrand
+            product.idBrand,
           );
           product.nameBrand = infoBrand.brand.brandName;
         }
@@ -273,7 +266,7 @@ export default class ProductService {
       delete dataProduct.nameBrand;
       const upProduct = await ProductModelInstance.updateProduct(
         idProduct,
-        dataProduct
+        dataProduct,
       );
 
       if (!upProduct) {

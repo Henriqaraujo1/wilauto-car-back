@@ -78,6 +78,7 @@ export default (app, passport) => {
       const token = req.headers.authorization;
       const tokenToVerify = TokensServicesInstance.verifyTokens(token);
 
+
       switch (tokenToVerify.codeStatus) {
         case 400:
           return res.status(400).json(tokenToVerify);
