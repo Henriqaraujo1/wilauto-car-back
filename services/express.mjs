@@ -11,9 +11,8 @@ dotenv.config({ path: "/git/system-back/back/.env.production" });
 /* eslint import/no-anonymous-default-export: [2, {"allowArrowFunction": true}] */
 export default (app) => {
   let corsOptions = {
-    origin: "https://will-auto.worldsoft-inc.com",
-    methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
-    credentials: true,
+    origin: '*',
+    methods: 'GET,PUT,POST,DELETE'
   };
 
   app.use(
