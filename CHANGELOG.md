@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.1](https://github.com/Henriqaraujo1/wilauto-car-back/compare/v1.2.0...v1.2.1) (2026-01-30)
+
+
+### Bug Fixes
+
+* correção do express ([a4121e3](https://github.com/Henriqaraujo1/wilauto-car-back/commit/a4121e3a69e8c28b47c2fd0bc8d23117d86eee4b))
+
 ## 1.2.0 (2026-01-29)
 
 
